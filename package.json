@@ -1,0 +1,16 @@
+{
+  "name": "interactive-comments-section",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "start:web": "npm run dev --workspace web-app",
+    "start:api": "npm run dev --workspace api-server",
+    "dev": "concurrently \"npm run start:web\" \"npm run start:api\""
+  },
+  "dependencies": {
+    "concurrently": "~9.2.1"
+  }
+}
