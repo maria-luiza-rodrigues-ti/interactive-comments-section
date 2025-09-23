@@ -1,13 +1,25 @@
-import Fastify from 'fastify'
+import Fastify from "fastify";
 
 const server = Fastify({
-  logger: true
-})
+  logger: true,
+});
 
-server.get('/', async function handler (request, reply) {
-  return { hello: 'world' }
-})
+const posts = [
+  {
+    user: {
+      username: "juliusomo",
+      image: {
+        png: "./images/avatars/image-juliusomo.png",
+        webp: "./images/avatars/image-juliusomo.webp",
+      },
+    },
+  },
+];
 
- server.listen({ port: 3333 }).then(() => {
-    console.log('HTTP server running!')
-  })
+server.get("/posts", async function handler(request, reply) {
+  return { hello: "world" };
+});
+
+server.listen({ port: 3333 }).then(() => {
+  console.log("HTTP server running!");
+});
