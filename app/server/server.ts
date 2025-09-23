@@ -147,10 +147,6 @@ server.get("/posts/:id", (request, reply) => {
   const params = request.params as Params;
   const postId = params.id;
 
-  if (postId) {
-    return reply.status(400).send();
-  }
-
   const post = posts.find((post) => post.id === postId);
 
   if (post) {
