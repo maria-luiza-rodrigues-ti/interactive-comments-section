@@ -5,6 +5,33 @@ const server = Fastify({
   logger: true,
 });
 
+const users = [
+  {
+    id: "0fc7fef2-57fa-49be-8006-481356466d63",
+    username: "juliusomo",
+    image: {
+      png: "./images/avatars/image-juliusomo.png",
+      webp: "./images/avatars/image-juliusomo.webp",
+    },
+  },
+  {
+    id: "a97aec26-e0dd-4aa9-bed3-d22838479e4e",
+    image: {
+      png: "./images/avatars/image-amyrobson.png",
+      webp: "./images/avatars/image-amyrobson.webp",
+    },
+    username: "amyrobson",
+  },
+  {
+    id: "950de311-fc14-41c4-b63e-cb8396862c1d",
+    image: {
+      png: "./images/avatars/image-ramsesmiron.png",
+      webp: "./images/avatars/image-ramsesmiron.webp",
+    },
+    username: "ramsesmiron",
+  },
+];
+
 const posts = [
   {
     id: crypto.randomUUID(),
@@ -25,7 +52,7 @@ const posts = [
         createdAt: "1 month ago",
         score: 12,
         user: {
-          id: crypto.randomUUID(),
+          id: "a97aec26-e0dd-4aa9-bed3-d22838479e4e",
           image: {
             png: "./images/avatars/image-amyrobson.png",
             webp: "./images/avatars/image-amyrobson.webp",
@@ -57,7 +84,7 @@ const posts = [
             score: 4,
             replyingTo: "maxblagun",
             user: {
-              id: crypto.randomUUID(),
+              id: "950de311-fc14-41c4-b63e-cb8396862c1d",
               image: {
                 png: "./images/avatars/image-ramsesmiron.png",
                 webp: "./images/avatars/image-ramsesmiron.webp",
@@ -87,6 +114,27 @@ const posts = [
   },
 ];
 
+server.get("/users", () => {
+  return { users };
+});
+
+server.get("/users/:id", (request, reply) => {
+  type Params = {
+    id: string;
+  };
+
+  const params = request.params as Params;
+  const userId = params.id;
+
+  const user = users.find((user) => user.id === userId);
+
+  if (user) {
+    return { user };
+  }
+
+  return reply.status(400).send();
+});
+
 server.get("/posts", () => {
   return { posts };
 });
@@ -98,6 +146,10 @@ server.get("/posts/:id", (request, reply) => {
 
   const params = request.params as Params;
   const postId = params.id;
+
+  if (postId) {
+    return reply.status(400).send();
+  }
 
   const post = posts.find((post) => post.id === postId);
 

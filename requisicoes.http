@@ -3,3 +3,11 @@ GET http://localhost:3333/posts
 ###
 
 GET http://localhost:3333/posts/1
+
+###
+
+GET http://localhost:3333/users
+
+###
+
+GET http://localhost:3333/users/0fc7fef2-57fa-49be-8006-481356466d63
