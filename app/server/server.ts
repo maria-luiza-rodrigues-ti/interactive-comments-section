@@ -2,7 +2,15 @@ import Fastify from "fastify";
 import crypto from "crypto";
 
 const server = Fastify({
-  logger: true,
+  logger: {
+    transport: {
+      target: "pino-pretty",
+      options: {
+        translateTime: "HH:MM:ss Z",
+        ignore: "pid,hostname",
+      },
+    },
+  },
 });
 
 const users = [
