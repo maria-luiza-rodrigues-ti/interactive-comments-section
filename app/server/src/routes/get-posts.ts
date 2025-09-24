@@ -8,6 +8,8 @@ export const getPostsRoute: FastifyPluginAsyncZod = async (server) => {
     "/posts",
     {
       schema: {
+        tags: ["posts"],
+        summary: "Get all posts",
         response: {
           200: z.object({
             posts: z.array(

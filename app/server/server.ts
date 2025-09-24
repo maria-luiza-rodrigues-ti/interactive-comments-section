@@ -1,8 +1,11 @@
+import scalarAPIReference from "@scalar/fastify-api-reference";
 import Fastify from "fastify";
+import { fastifySwagger } from "@fastify/swagger";
 import {
   serializerCompiler,
   validatorCompiler,
   type ZodTypeProvider,
+  jsonSchemaTransform,
 } from "fastify-type-provider-zod";
 import { getPostsRoute } from "./src/routes/get-posts.ts";
 import { getUsersRoute } from "./src/routes/get-users.ts";
@@ -20,6 +23,20 @@ const server = Fastify({
     },
   },
 }).withTypeProvider<ZodTypeProvider>();
+
+server.register(fastifySwagger, {
+  openapi: {
+    info: {
+      title: "Interactive Comments Section",
+      version: "1.0.0",
+    },
+  },
+  transform: jsonSchemaTransform,
+});
+
+server.register(scalarAPIReference, {
+  routePrefix: "/docs",
+});
 
 server.setValidatorCompiler(validatorCompiler);
 server.setSerializerCompiler(serializerCompiler);

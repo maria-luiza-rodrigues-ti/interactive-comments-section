@@ -2,7 +2,7 @@ GET http://localhost:3333/posts
 
 ###
 
-GET http://localhost:3333/posts/1
+GET http://localhost:3333/posts/f7a6ae53-364e-4c28-9395-a260a0219abd
 
 ###
 

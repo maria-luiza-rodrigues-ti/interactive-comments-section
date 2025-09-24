@@ -9,17 +9,19 @@ export const getPostByIdRoute: FastifyPluginAsyncZod = async (server) => {
     "/posts/:id",
     {
       schema: {
+        tags: ["posts"],
+        summary: "Get post by id",
         params: z.object({
           id: z.uuid(),
         }),
         response: {
           200: z.object({
-            post: {
+            post: z.object({
               id: z.uuid(),
               userId: z.uuid(),
               content: z.string(),
-              createdAt: z.date(),
-            },
+              createdAt: z.date().nullable(),
+            }),
           }),
           404: z.null().describe("Post not found"),
         },
