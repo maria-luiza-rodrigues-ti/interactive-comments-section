@@ -1,4 +1,13 @@
 import Fastify from "fastify";
+import { db } from "./src/database/client.ts";
+import { postsTable, usersTable } from "./src/database/schema.ts";
+import { eq } from "drizzle-orm";
+import {
+  serializerCompiler,
+  validatorCompiler,
+  type ZodTypeProvider,
+} from "fastify-type-provider-zod";
+import { z } from "zod";
 
 const server = Fastify({
   logger: {
@@ -10,160 +19,134 @@ const server = Fastify({
       },
     },
   },
-});
+}).withTypeProvider<ZodTypeProvider>();
 
-// const users = [
-//   {
-//     id: "0fc7fef2-57fa-49be-8006-481356466d63",
-//     username: "juliusomo",
-//     image: {
-//       png: "./images/avatars/image-juliusomo.png",
-//       webp: "./images/avatars/image-juliusomo.webp",
-//     },
-//   },
-//   {
-//     id: "a97aec26-e0dd-4aa9-bed3-d22838479e4e",
-//     image: {
-//       png: "./images/avatars/image-amyrobson.png",
-//       webp: "./images/avatars/image-amyrobson.webp",
-//     },
-//     username: "amyrobson",
-//   },
-//   {
-//     id: "950de311-fc14-41c4-b63e-cb8396862c1d",
-//     image: {
-//       png: "./images/avatars/image-ramsesmiron.png",
-//       webp: "./images/avatars/image-ramsesmiron.webp",
-//     },
-//     username: "ramsesmiron",
-//   },
-// ];
+server.setValidatorCompiler(validatorCompiler);
+server.setSerializerCompiler(serializerCompiler);
 
-// const posts = [
-//   {
-//     id: crypto.randomUUID(),
-//     user: {
-//       id: "0fc7fef2-57fa-49be-8006-481356466d63",
-//       username: "juliusomo",
-//       image: {
-//         png: "./images/avatars/image-juliusomo.png",
-//         webp: "./images/avatars/image-juliusomo.webp",
-//       },
-//     },
-//     post: "Ut pariatur Lorem in est velit minim velit. Officia enim anim commodo pariatur cillum velit pariatur quis incididunt. Laboris dolore dolor pariatur elit sunt ad eiusmod labore irure magna minim dolore occaecat. Et aute eu enim qui pariatur labore. Adipisicing consectetur aliqua aliquip minim est amet deserunt do consequat.",
-//     comments: [
-//       {
-//         id: crypto.randomUUID(),
-//         content:
-//           "Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You've nailed the design and the responsiveness at various breakpoints works really well.",
-//         createdAt: "1 month ago",
-//         score: 12,
-//         user: {
-//           id: "a97aec26-e0dd-4aa9-bed3-d22838479e4e",
-//           image: {
-//             png: "./images/avatars/image-amyrobson.png",
-//             webp: "./images/avatars/image-amyrobson.webp",
-//           },
-//           username: "amyrobson",
-//         },
-//         replies: [],
-//       },
-//       {
-//         id: crypto.randomUUID(),
-//         content:
-//           "Woah, your project looks awesome! How long have you been coding for? I'm still new, but think I want to dive into React as well soon. Perhaps you can give me an insight on where I can learn React? Thanks!",
-//         createdAt: "2 weeks ago",
-//         score: 5,
-//         user: {
-//           id: crypto.randomUUID(),
-//           image: {
-//             png: "./images/avatars/image-maxblagun.png",
-//             webp: "./images/avatars/image-maxblagun.webp",
-//           },
-//           username: "maxblagun",
-//         },
-//         replies: [
-//           {
-//             id: crypto.randomUUID(),
-//             content:
-//               "If you're still new, I'd recommend focusing on the fundamentals of HTML, CSS, and JS before considering React. It's very tempting to jump ahead but lay a solid foundation first.",
-//             createdAt: "1 week ago",
-//             score: 4,
-//             replyingTo: "maxblagun",
-//             user: {
-//               id: "950de311-fc14-41c4-b63e-cb8396862c1d",
-//               image: {
-//                 png: "./images/avatars/image-ramsesmiron.png",
-//                 webp: "./images/avatars/image-ramsesmiron.webp",
-//               },
-//               username: "ramsesmiron",
-//             },
-//           },
-//           {
-//             id: crypto.randomUUID(),
-//             content:
-//               "I couldn't agree more with this. Everything moves so fast and it always seems like everyone knows the newest library/framework. But the fundamentals are what stay constant.",
-//             createdAt: "2 days ago",
-//             score: 2,
-//             replyingTo: "ramsesmiron",
-//             user: {
-//               id: "0fc7fef2-57fa-49be-8006-481356466d63",
-//               image: {
-//                 png: "./images/avatars/image-juliusomo.png",
-//                 webp: "./images/avatars/image-juliusomo.webp",
-//               },
-//               username: "juliusomo",
-//             },
-//           },
-//         ],
-//       },
-//     ],
-//   },
-// ];
+server.get(
+  "/users",
+  {
+    schema: {
+      response: {
+        200: z.object({
+          users: z.array(
+            z.object({
+              id: z.uuid(),
+              username: z.string(),
+              imagePng: z.string().nullable(),
+              imageWebp: z.string().nullable(),
+            })
+          ),
+        }),
+      },
+    },
+  },
+  async (request, reply) => {
+    const result = await db.select().from(usersTable);
 
-// server.get("/users", async(request, reply) => {
-//   const users = await db.select().from(usersTable)
+    return reply.status(200).send({ users: result });
+  }
+);
 
-//   return reply.statusCode().send( { users });
-// });
+server.get(
+  "/users/:id",
+  {
+    schema: {
+      params: z.object({
+        id: z.uuid(),
+      }),
+      response: {
+        200: z.object({
+          user: z.object({
+            id: z.uuid(),
+            username: z.string(),
+            imagePng: z.string().nullable(),
+            imageWebp: z.string().nullable(),
+          }),
+        }),
+        404: z.null().describe("User not found."),
+      },
+    },
+  },
+  async (request, reply) => {
+    const userId = request.params.id;
 
-// server.get("/users/:id", (request, reply) => {
-//   type Params = {
-//     id: string;
-//   };
+    const result = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.id, userId));
 
-//   const params = request.params as Params;
-//   const userId = params.id;
+    if (result.length > 0) {
+      return { user: result[0] };
+    }
 
-//   const user = users.find((user) => user.id === userId);
+    return reply.status(404).send();
+  }
+);
 
-//   if (user) {
-//     return { user };
-//   }
+server.get(
+  "/posts",
+  {
+    schema: {
+      response: {
+        200: z.object({
+          posts: z.array(
+            z.object({
+              id: z.uuid(),
+              userId: z.uuid(),
+              content: z.string(),
+              createdAt: z.date().nullable(),
+            })
+          ),
+        }),
+      },
+    },
+  },
+  async (request, reply) => {
+    const result = await db.select().from(postsTable);
 
-//   return reply.status(400).send();
-// });
+    return reply.status(200).send({ posts: result });
+  }
+);
 
-// server.get("/posts", () => {
-//   return { posts };
-// });
+server.get(
+  "/posts/:id",
+  {
+    schema: {
+      params: z.object({
+        id: z.uuid(),
+      }),
+      response: {
+        200: z.object({
+          post: {
+            id: z.uuid(),
+            userId: z.uuid(),
+            content: z.string(),
+            createdAt: z.date(),
+          },
+        }),
+        404: z.null().describe("Post not found"),
+      },
+    },
+  },
+  async (request, reply) => {
+    const postId = request.params.id;
 
-// server.get("/posts/:id", (request, reply) => {
-//   type Params = {
-//     id: string;
-//   };
+    const result = await db
+      .select()
+      .from(postsTable)
+      .where(eq(postsTable.id, postId));
 
-//   const params = request.params as Params;
-//   const postId = params.id;
+    if (result.length > 0) {
+      return {
+        post: result[0],
+      };
+    }
 
-//   const post = posts.find((post) => post.id === postId);
-
-//   if (post) {
-//     return { post };
-//   }
-
-//   return reply.status(404).send();
-// });
+    return reply.status(404).send();
+  }
+);
 
 server.listen({ port: 3333 }).then(() => {
   console.log("HTTP server running!");

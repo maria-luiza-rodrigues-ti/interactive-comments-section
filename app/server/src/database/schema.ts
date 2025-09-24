@@ -1,6 +1,6 @@
 import { pgTable, text, uuid, timestamp } from "drizzle-orm/pg-core";
 
-export const userTable = pgTable("users", {
+export const usersTable = pgTable("users", {
   id: uuid().primaryKey().defaultRandom(),
   username: text().notNull(),
   imagePng: text(),
@@ -11,7 +11,7 @@ export const postsTable = pgTable("posts", {
   id: uuid().primaryKey().defaultRandom(),
   userId: uuid()
     .notNull()
-    .references(() => userTable.id),
+    .references(() => usersTable.id),
   content: text().notNull(),
   createdAt: timestamp().defaultNow(),
 });

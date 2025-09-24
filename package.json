@@ -11,6 +11,8 @@
     "dev": "concurrently \"npm run start:web\" \"npm run start:server\""
   },
   "dependencies": {
-    "concurrently": "~9.2.1"
+    "concurrently": "~9.2.1",
+    "fastify-type-provider-zod": "^6.0.0",
+    "zod": "^4.1.11"
   }
 }
