@@ -1,7 +1,7 @@
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { db } from "../database/client.ts";
-import { postsTable } from "../database/schema.ts";
+import { posts } from "../database/schema.ts";
 
 export const getPostsRoute: FastifyPluginAsyncZod = async (server) => {
   server.get(
@@ -25,7 +25,7 @@ export const getPostsRoute: FastifyPluginAsyncZod = async (server) => {
       },
     },
     async (request, reply) => {
-      const result = await db.select().from(postsTable);
+      const result = await db.select().from(posts);
 
       return reply.status(200).send({ posts: result });
     }

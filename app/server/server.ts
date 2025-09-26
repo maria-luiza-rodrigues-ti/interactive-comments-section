@@ -11,6 +11,8 @@ import { getPostsRoute } from "./src/routes/get-posts.ts";
 import { getUsersRoute } from "./src/routes/get-users.ts";
 import { getPostByIdRoute } from "./src/routes/get-post-by-id.ts";
 import { getUserByIdRoute } from "./src/routes/get-user-by-id.ts";
+import { createPostRoute } from "./src/routes/create-post.ts";
+import { createUserRoute } from "./src/routes/create-user.ts";
 
 const server = Fastify({
   logger: {
@@ -45,6 +47,8 @@ server.register(getPostsRoute);
 server.register(getUsersRoute);
 server.register(getPostByIdRoute);
 server.register(getUserByIdRoute);
+server.register(createPostRoute);
+server.register(createUserRoute);
 
 server.listen({ port: 3333 }).then(() => {
   console.log("HTTP server running!");

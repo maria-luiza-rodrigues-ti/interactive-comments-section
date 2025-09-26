@@ -1,7 +1,7 @@
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { db } from "../database/client.ts";
-import { usersTable } from "../database/schema.ts";
+import { users } from "../database/schema.ts";
 import { eq } from "drizzle-orm";
 
 export const getUserByIdRoute: FastifyPluginAsyncZod = async (server) => {
@@ -30,10 +30,7 @@ export const getUserByIdRoute: FastifyPluginAsyncZod = async (server) => {
     async (request, reply) => {
       const userId = request.params.id;
 
-      const result = await db
-        .select()
-        .from(usersTable)
-        .where(eq(usersTable.id, userId));
+      const result = await db.select().from(users).where(eq(users.id, userId));
 
       if (result.length > 0) {
         return { user: result[0] };

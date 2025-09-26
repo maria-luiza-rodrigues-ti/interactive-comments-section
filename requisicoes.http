@@ -2,7 +2,18 @@ GET http://localhost:3333/posts
 
 ###
 
-GET http://localhost:3333/posts/f7a6ae53-364e-4c28-9395-a260a0219abd
+GET http://localhost:3333/posts/db872035-44e1-45d8-a392-d9cc4db56f4e
+
+###
+
+POST http://localhost:3333/posts
+Content-Type: application/json
+
+{
+  "content": "Este é um exemplo de conteúdo do post",
+  "userId": "be427b89-ea3a-421a-9019-5988cc17eedc"
+}
+
 
 ###
 
@@ -10,4 +21,13 @@ GET http://localhost:3333/users
 
 ###
 
-GET http://localhost:3333/users/0fc7fef2-57fa-49be-8006-481356466d63
+GET http://localhost:3333/users/be427b89-ea3a-421a-9019-5988cc17eedc
+
+###
+
+POST http://localhost:3333/users
+Content-Type: application/json
+
+{
+  "username": "@maria-luiza"
+}
