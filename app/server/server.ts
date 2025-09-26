@@ -31,19 +31,21 @@ const server = Fastify({
   },
 }).withTypeProvider<ZodTypeProvider>();
 
-server.register(fastifySwagger, {
-  openapi: {
-    info: {
-      title: "Interactive Comments Section",
-      version: "1.0.0",
+if (process.env.NODE_ENV === "development") {
+  server.register(fastifySwagger, {
+    openapi: {
+      info: {
+        title: "Interactive Comments Section",
+        version: "1.0.0",
+      },
     },
-  },
-  transform: jsonSchemaTransform,
-});
+    transform: jsonSchemaTransform,
+  });
 
-server.register(scalarAPIReference, {
-  routePrefix: "/docs",
-});
+  server.register(scalarAPIReference, {
+    routePrefix: "/docs",
+  });
+}
 
 server.setValidatorCompiler(validatorCompiler);
 server.setSerializerCompiler(serializerCompiler);
