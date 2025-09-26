@@ -16,7 +16,7 @@ export const updateCommentRoute: FastifyPluginAsyncZod = async (server) => {
         }),
         body: z.object({
           content: z.string(),
-          score: z.number().nullable(),
+          score: z.number().optional(),
         }),
         response: {
           200: z.object({

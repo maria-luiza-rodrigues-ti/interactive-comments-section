@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node --watch server.ts",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "drizzle-kit migrate",
+    "db:seed": "node --watch ./src/database/seed.ts"
   },
   "author": "",
   "license": "ISC",
