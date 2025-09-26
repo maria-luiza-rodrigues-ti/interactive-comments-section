@@ -13,6 +13,11 @@ import { getPostByIdRoute } from "./src/routes/get-post-by-id.ts";
 import { getUserByIdRoute } from "./src/routes/get-user-by-id.ts";
 import { createPostRoute } from "./src/routes/create-post.ts";
 import { createUserRoute } from "./src/routes/create-user.ts";
+import { getCommentsRoute } from "./src/routes/get-comments.ts";
+import { createCommentRoute } from "./src/routes/create-comment.ts";
+import { getCommentByIdRoute } from "./src/routes/get-comment-by-id.ts";
+import { updateCommentRoute } from "./src/routes/update-comment.ts";
+import { deleteCommentRoute } from "./src/routes/delete-comment.ts";
 
 const server = Fastify({
   logger: {
@@ -49,6 +54,11 @@ server.register(getPostByIdRoute);
 server.register(getUserByIdRoute);
 server.register(createPostRoute);
 server.register(createUserRoute);
+server.register(getCommentsRoute);
+server.register(createCommentRoute);
+server.register(getCommentByIdRoute);
+server.register(updateCommentRoute);
+server.register(deleteCommentRoute);
 
 server.listen({ port: 3333 }).then(() => {
   console.log("HTTP server running!");

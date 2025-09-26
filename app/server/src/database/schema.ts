@@ -2,7 +2,7 @@ import { pgTable, text, uuid, timestamp, integer } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
   id: uuid().primaryKey().defaultRandom(),
-  username: text().notNull(),
+  username: text().notNull().unique(),
   imagePng: text(),
   imageWebp: text(),
 });
@@ -27,7 +27,6 @@ export const comments = pgTable(
       .notNull()
       .references(() => users.id),
     parentCommentId: uuid(),
-    replyingTo: text(),
     content: text().notNull(),
     score: integer().default(0),
     createdAt: timestamp().defaultNow(),

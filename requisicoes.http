@@ -29,5 +29,39 @@ POST http://localhost:3333/users
 Content-Type: application/json
 
 {
-  "username": "@maria-luiza"
+  "username": "@liliam-rodrigues"
 }
+
+###
+
+GET http://localhost:3333/comments
+
+###
+
+GET http://localhost:3333/comments/5474ef0f-9889-4e19-82c5-945fa26f9d3a
+
+###
+
+POST http://localhost:3333/comments
+Content-Type: application/json
+
+{
+  "postId": "990cc9aa-3b28-4baf-8329-dcf16a194930",
+  "userId": "f30f1896-ce88-4418-bf0d-4b2f96d70223",
+  "parentCommentId": "cca4bb45-b2ac-40be-9247-43ee47026873",
+  "content": "comentando o comentário"
+}
+
+###
+
+PUT http://localhost:3333/comments/5474ef0f-9889-4e19-82c5-945fa26f9d3a
+Content-Type: application/json
+
+{
+  "content": "alterando o comentário de teste",
+  "score": 1
+}
+
+###
+
+DELETE http://localhost:3333/comments/cca4bb45-b2ac-40be-9247-43ee47026873
