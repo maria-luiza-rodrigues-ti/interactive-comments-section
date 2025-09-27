@@ -19,8 +19,9 @@ export const getUserByIdRoute: FastifyPluginAsyncZod = async (server) => {
             user: z.object({
               id: z.uuid(),
               username: z.string(),
-              imagePng: z.string().nullable(),
-              imageWebp: z.string().nullable(),
+              email: z.email(),
+              avatar: z.url().nullable(),
+              createdAt: z.date().nullable(),
             }),
           }),
           404: z.null().describe("User not found."),

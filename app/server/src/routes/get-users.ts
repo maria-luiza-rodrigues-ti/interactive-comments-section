@@ -2,7 +2,7 @@ import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { db } from "../database/client.ts";
 import { users } from "../database/schema.ts";
-import { asc, ilike, desc } from "drizzle-orm";
+import { asc, ilike, and, SQL } from "drizzle-orm";
 
 export const getUsersRoute: FastifyPluginAsyncZod = async (server) => {
   server.get(
@@ -13,7 +13,7 @@ export const getUsersRoute: FastifyPluginAsyncZod = async (server) => {
         summary: "Get all users",
         querystring: z.object({
           search: z.string().optional(),
-          orderBy: z.enum(["asc", "desc"]).optional().default("asc"),
+          orderBy: z.enum(["email", "username"]).optional().default("username"),
           page: z.coerce.number().optional().default(1),
         }),
         response: {
@@ -22,10 +22,12 @@ export const getUsersRoute: FastifyPluginAsyncZod = async (server) => {
               z.object({
                 id: z.uuid(),
                 username: z.string(),
-                imagePng: z.string().nullable(),
-                imageWebp: z.string().nullable(),
+                email: z.email(),
+                avatar: z.url().nullable(),
+                createdAt: z.date().nullable(),
               })
             ),
+            total: z.number(),
           }),
         },
       },
@@ -33,17 +35,24 @@ export const getUsersRoute: FastifyPluginAsyncZod = async (server) => {
     async (request, reply) => {
       const { search, orderBy, page } = request.query;
 
-      const result = await db
-        .select()
-        .from(users)
-        .where(search ? ilike(users.username, `%${search}%`) : undefined)
-        .orderBy(
-          orderBy === "desc" ? desc(users.username) : asc(users.username)
-        )
-        .offset((page - 1) * 2)
-        .limit(10);
+      const conditions: SQL[] = [];
 
-      return reply.status(200).send({ users: result });
+      if (search) {
+        conditions.push(ilike(users.username, `%${search}%`));
+      }
+
+      const [result, total] = await Promise.all([
+        db
+          .select()
+          .from(users)
+          .where(and(...conditions))
+          .orderBy(asc(users[orderBy]))
+          .offset((page - 1) * 10)
+          .limit(10),
+        db.$count(users, and(...conditions)),
+      ]);
+
+      return reply.status(200).send({ users: result, total });
     }
   );
 };

@@ -2,9 +2,10 @@ import { pgTable, text, uuid, timestamp, integer } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
   id: uuid().primaryKey().defaultRandom(),
+  email: text().notNull().unique(),
   username: text().notNull().unique(),
-  imagePng: text(),
-  imageWebp: text(),
+  avatar: text(),
+  createdAt: timestamp().defaultNow(),
 });
 
 export const posts = pgTable("posts", {

@@ -6,12 +6,36 @@ async function seed() {
   const usersInsert = await db
     .insert(users)
     .values([
-      { username: faker.lorem.slug({ min: 6, max: 20 }) },
-      { username: faker.lorem.slug({ min: 6, max: 20 }) },
-      { username: faker.lorem.slug({ min: 6, max: 20 }) },
-      { username: faker.lorem.slug({ min: 6, max: 20 }) },
-      { username: faker.lorem.slug({ min: 6, max: 20 }) },
-      { username: faker.lorem.slug({ min: 6, max: 20 }) },
+      {
+        email: faker.internet.email(),
+        username: faker.lorem.slug({ min: 1, max: 5 }),
+        avatar: faker.image.urlPicsumPhotos(),
+      },
+      {
+        email: faker.internet.email(),
+        username: faker.lorem.slug({ min: 1, max: 5 }),
+        avatar: faker.image.urlPicsumPhotos(),
+      },
+      {
+        email: faker.internet.email(),
+        username: faker.lorem.slug({ min: 1, max: 5 }),
+        avatar: faker.image.urlPicsumPhotos(),
+      },
+      {
+        email: faker.internet.email(),
+        username: faker.lorem.slug({ min: 1, max: 5 }),
+        avatar: faker.image.urlPicsumPhotos(),
+      },
+      {
+        email: faker.internet.email(),
+        username: faker.lorem.slug({ min: 1, max: 5 }),
+        avatar: faker.image.urlPicsumPhotos(),
+      },
+      {
+        email: faker.internet.email(),
+        username: faker.lorem.slug({ min: 1, max: 5 }),
+        avatar: faker.image.urlPicsumPhotos(),
+      },
     ])
     .returning();
 

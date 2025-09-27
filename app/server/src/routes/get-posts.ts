@@ -10,6 +10,11 @@ export const getPostsRoute: FastifyPluginAsyncZod = async (server) => {
       schema: {
         tags: ["posts"],
         summary: "Get all posts",
+        queryString: z.object({
+          search: z.string().optional(),
+          orderBy: z.enum(["content", "username"]).optional(),
+          page: z.coerce.number().optional(),
+        }),
         response: {
           200: z.object({
             posts: z.array(

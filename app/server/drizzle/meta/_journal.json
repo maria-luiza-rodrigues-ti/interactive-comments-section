@@ -29,6 +29,13 @@
       "when": 1758922479283,
       "tag": "0003_premium_moon_knight",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1758928857356,
+      "tag": "0004_soft_black_tom",
+      "breakpoints": true
     }
   ]
 }

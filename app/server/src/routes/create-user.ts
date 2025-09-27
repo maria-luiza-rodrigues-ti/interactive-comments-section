@@ -12,6 +12,8 @@ export const createUserRoute: FastifyPluginAsyncZod = async (server) => {
         summary: "Create user",
         body: z.object({
           username: z.string(),
+          email: z.email(),
+          avatar: z.url().optional(),
         }),
         response: {
           201: z.object({
@@ -21,12 +23,14 @@ export const createUserRoute: FastifyPluginAsyncZod = async (server) => {
       },
     },
     async (request, reply) => {
-      const { username } = request.body;
+      const { username, email, avatar } = request.body;
 
       const result = await db
         .insert(users)
         .values({
           username: username,
+          email: email,
+          avatar: avatar ?? null,
         })
         .returning();
 
