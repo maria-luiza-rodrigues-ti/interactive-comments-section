@@ -27,6 +27,7 @@
     "typescript-eslint": "^8.44.1"
   },
   "dependencies": {
+    "fastify-type-provider-zod": "^6.0.0",
     "@fastify/swagger": "^9.5.1",
     "@scalar/fastify-api-reference": "^1.36.0",
     "dotenv": "^17.2.2",
