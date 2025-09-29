@@ -31,7 +31,7 @@ export const getPostsRoute: FastifyPluginAsyncZod = async (server) => {
                 avatar: z.string().nullable(),
               })
             ),
-            total: z.number().nullable(),
+            total: z.number(),
           }),
         },
       },

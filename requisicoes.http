@@ -34,7 +34,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3333/comments
+GET http://localhost:3333/comments?search=enim&orderBy=content&page=1
 
 ###
 
