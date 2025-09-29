@@ -1,4 +1,4 @@
-GET http://localhost:3333/posts
+GET http://localhost:3333/posts?orderBy=username
 
 ###
 
