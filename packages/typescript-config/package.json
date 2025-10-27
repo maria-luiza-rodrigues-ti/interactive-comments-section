@@ -1,0 +1,22 @@
+{
+  "name": "@interactive-comments/typescript-config",
+  "version": "1.0.0",
+  "description": "Shared TypeScript configuration for the monorepo",
+  "main": "index.js",
+  "files": [
+    "base.json",
+    "node.json",
+    "react.json"
+  ],
+  "scripts": {},
+  "keywords": [
+    "typescript",
+    "config"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {}
+}

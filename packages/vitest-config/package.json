@@ -1,0 +1,25 @@
+{
+  "name": "@interactive-comments/vitest-config",
+  "version": "1.0.0",
+  "description": "Shared Vitest configuration for the monorepo",
+  "main": "index.js",
+  "files": [
+    "base.config.ts",
+    "node.config.ts"
+  ],
+  "scripts": {},
+  "keywords": [
+    "vitest",
+    "testing",
+    "config"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "vitest": "^3.2.4",
+    "@vitest/coverage-v8": "^3.2.4"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
