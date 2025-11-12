@@ -1,4 +1,5 @@
 import { fakerPT_BR as faker } from "@faker-js/faker";
+
 import { db } from "../../database/client.ts";
 import { users } from "../../database/schema.ts";
 

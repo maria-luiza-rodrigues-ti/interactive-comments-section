@@ -1,8 +1,9 @@
+import { and, asc, eq, ilike, or, SQL } from "drizzle-orm";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
+
 import { db } from "../database/client.ts";
 import { comments, users } from "../database/schema.ts";
-import { or, SQL, ilike, asc, eq, and } from "drizzle-orm";
 
 export const getCommentsRoute: FastifyPluginAsyncZod = async (server) => {
   server.get(

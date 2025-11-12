@@ -1,8 +1,9 @@
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
+
+import { or, SQL, ilike, and, eq, asc } from "drizzle-orm";
 import { db } from "../database/client.ts";
 import { posts, users } from "../database/schema.ts";
-import { or, SQL, ilike, and, eq, asc } from "drizzle-orm";
 
 export const getPostsRoute: FastifyPluginAsyncZod = async (server) => {
   server.get(
