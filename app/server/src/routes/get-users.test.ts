@@ -8,7 +8,7 @@ import { makeUser } from "../test/factories/make-user.ts";
 test("get a user", async () => {
   await server.ready();
 
-  const username = faker.person.firstName().toLocaleLowerCase();
+  const username = faker.lorem.slug();
   const user = await makeUser(username);
 
   const response = await request(server.server).get(
