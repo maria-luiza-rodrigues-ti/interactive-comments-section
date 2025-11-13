@@ -1,5 +1,6 @@
 import request from "supertest";
 import { expect, test } from "vitest";
+import { faker } from "@faker-js/faker";
 
 import { server } from "../../app.ts";
 import { makeUser } from "../test/factories/make-user.ts";
@@ -7,9 +8,12 @@ import { makeUser } from "../test/factories/make-user.ts";
 test("get a user", async () => {
   await server.ready();
 
-  const user = await makeUser();
+  const username = faker.person.firstName().toLocaleLowerCase();
+  const user = await makeUser(username);
 
-  const response = await request(server.server).get(`/users`);
+  const response = await request(server.server).get(
+    `/users?search=${username}`
+  );
 
   expect(response.status).toEqual(200);
   expect(response.body).toEqual({
@@ -17,7 +21,7 @@ test("get a user", async () => {
     users: [
       {
         id: user.id,
-        username: user.username,
+        username: username,
         avatar: user.avatar,
         email: user.email,
         createdAt: user.createdAt?.toISOString() || null,
