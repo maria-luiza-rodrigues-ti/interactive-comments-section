@@ -1,8 +1,9 @@
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
-import { db } from "../database/client.ts";
-import { posts } from "../database/schema.ts";
 import { eq } from "drizzle-orm";
+
+import { db } from "../database/client.ts";
+import { posts, users } from "../database/schema.ts";
 
 export const getPostByIdRoute: FastifyPluginAsyncZod = async (server) => {
   server.get(
@@ -21,6 +22,8 @@ export const getPostByIdRoute: FastifyPluginAsyncZod = async (server) => {
               userId: z.uuid(),
               content: z.string(),
               createdAt: z.date().nullable(),
+              username: z.string().nullable(),
+              avatar: z.string().nullable(),
             }),
           }),
           404: z.null().describe("Post not found"),
@@ -30,7 +33,18 @@ export const getPostByIdRoute: FastifyPluginAsyncZod = async (server) => {
     async (request, reply) => {
       const postId = request.params.id;
 
-      const result = await db.select().from(posts).where(eq(posts.id, postId));
+      const result = await db
+        .select({
+          id: posts.id,
+          userId: posts.userId,
+          content: posts.content,
+          createdAt: posts.createdAt,
+          username: users.username,
+          avatar: users.avatar,
+        })
+        .from(posts)
+        .leftJoin(users, eq(posts.userId, users.id))
+        .where(eq(posts.id, postId));
 
       if (result.length > 0) {
         return {

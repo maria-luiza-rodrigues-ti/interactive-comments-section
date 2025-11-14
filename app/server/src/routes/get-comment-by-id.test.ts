@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 import request from "supertest";
 import { expect, test } from "vitest";
 
@@ -9,24 +11,41 @@ import { makeComment } from "../test/factories/make-comment.ts";
 test("get a comment by id", async () => {
   await server.ready();
 
-  // const user = await makeUser();
-  // const post = await makePost(user.id);
-  // const comment = await makeComment({ userId: user.id, postId: post.id });
+  const user = await makeUser();
+  const post = await makePost({ userId: user.id });
 
-  // const response = await request(server.server).get(`/comments/${comment.id}`);
+  const commentId = randomUUID();
 
-  // expect(response.status).toEqual(200);
-  // expect(response.body).toEqual({
-  //   comment: {
-  //     id: comment.id,
-  //     postId: post.id,
-  //     userId: user.id,
-  //     content: comment.content,
-  //     createdAt: comment.createdAt?.toISOString() || null,
-  //     username: user.username,
-  //     avatar: user.avatar,
-  //     parentCommentId: null,
-  //     score: 0,
-  //   },
-  // });
+  const comment = await makeComment({
+    userId: user.id,
+    postId: post.id,
+    commentId,
+  });
+
+  const response = await request(server.server).get(`/comments/${comment.id}`);
+
+  expect(response.status).toEqual(200);
+  expect(response.body).toEqual({
+    comment: {
+      id: commentId,
+      postId: post.id,
+      userId: user.id,
+      content: expect.any(String),
+      createdAt: expect.any(String),
+      parentCommentId: null,
+      score: expect.any(Number),
+      username: expect.any(String),
+      avatar: expect.any(String),
+    },
+  });
+});
+
+test("return 404 for non existing comments", async () => {
+  await server.ready();
+
+  const response = await request(server.server).get(
+    `/comments/569d8f11-563c-4048-8b1b-0c36b83d597b`
+  );
+
+  expect(response.status).toEqual(404);
 });

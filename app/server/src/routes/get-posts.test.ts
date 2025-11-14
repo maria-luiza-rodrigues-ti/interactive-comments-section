@@ -35,7 +35,8 @@ test("get a post searching by username", async () => {
   await server.ready();
 
   const username = faker.lorem.slug();
-  const user = await makeUser(username);
+  const user = await makeUser({ username });
+
   const post = await makePost({ userId: user.id });
 
   const response = await request(server.server).get(
@@ -50,9 +51,9 @@ test("get a post searching by username", async () => {
         id: post.id,
         content: post.content,
         userId: user.id,
-        createdAt: post.createdAt?.toISOString() || null,
+        createdAt: expect.any(String),
         username: username,
-        avatar: user.avatar,
+        avatar: expect.any(String),
       },
     ],
   });

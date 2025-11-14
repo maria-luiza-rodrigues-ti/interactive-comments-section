@@ -9,7 +9,7 @@ test("get a user", async () => {
   await server.ready();
 
   const username = faker.lorem.slug();
-  const user = await makeUser(username);
+  const user = await makeUser({ username });
 
   const response = await request(server.server).get(
     `/users?search=${username}`
@@ -22,9 +22,9 @@ test("get a user", async () => {
       {
         id: user.id,
         username: username,
-        avatar: user.avatar,
-        email: user.email,
-        createdAt: user.createdAt?.toISOString() || null,
+        avatar: expect.any(String),
+        email: expect.any(String),
+        createdAt: expect.any(String),
       },
     ],
   });

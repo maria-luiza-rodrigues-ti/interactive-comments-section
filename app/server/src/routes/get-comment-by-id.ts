@@ -1,8 +1,9 @@
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
-import { db } from "../database/client.ts";
-import { comments } from "../database/schema.ts";
 import { eq } from "drizzle-orm";
+
+import { db } from "../database/client.ts";
+import { comments, users } from "../database/schema.ts";
 
 export const getCommentByIdRoute: FastifyPluginAsyncZod = async (server) => {
   server.get(
@@ -24,6 +25,8 @@ export const getCommentByIdRoute: FastifyPluginAsyncZod = async (server) => {
               content: z.string(),
               score: z.number().nullable(),
               createdAt: z.date().nullable(),
+              username: z.string().nullable(),
+              avatar: z.url().nullable(),
             }),
           }),
           404: z.null().describe("Comment not found"),
@@ -34,8 +37,19 @@ export const getCommentByIdRoute: FastifyPluginAsyncZod = async (server) => {
       const commentId = request.params.id;
 
       const result = await db
-        .select()
+        .select({
+          id: comments.id,
+          postId: comments.postId,
+          userId: comments.userId,
+          parentCommentId: comments.parentCommentId,
+          content: comments.content,
+          score: comments.score,
+          createdAt: comments.createdAt,
+          username: users.username,
+          avatar: users.avatar,
+        })
         .from(comments)
+        .leftJoin(users, eq(comments.userId, users.id))
         .where(eq(comments.id, commentId));
 
       if (result.length > 0) {

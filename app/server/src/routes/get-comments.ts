@@ -1,4 +1,4 @@
-import { and, asc, eq, ilike, or, SQL } from "drizzle-orm";
+import { and, asc, count, eq, ilike, or, SQL } from "drizzle-orm";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 
@@ -54,7 +54,7 @@ export const getCommentsRoute: FastifyPluginAsyncZod = async (server) => {
         conditions.push(orCondition!);
       }
 
-      const [result, total] = await Promise.all([
+      const [result, [{ count: total }]] = await Promise.all([
         db
           .select({
             id: comments.id,
@@ -75,10 +75,11 @@ export const getCommentsRoute: FastifyPluginAsyncZod = async (server) => {
           )
           .offset((page - 1) * 10)
           .limit(10),
-        db.$count(
-          comments,
-          search ? ilike(comments.content, `%${search}%`) : undefined
-        ),
+        db
+          .select({ count: count(comments.id) })
+          .from(comments)
+          .leftJoin(users, eq(comments.userId, users.id))
+          .where(and(...conditions)),
       ]);
 
       return reply.status(200).send({ comments: result, total });
