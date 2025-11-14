@@ -1,8 +1,9 @@
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
+import { eq } from "drizzle-orm";
+
 import { db } from "../database/client.ts";
 import { comments } from "../database/schema.ts";
-import { eq } from "drizzle-orm";
 
 export const deleteCommentRoute: FastifyPluginAsyncZod = async (server) => {
   server.delete(

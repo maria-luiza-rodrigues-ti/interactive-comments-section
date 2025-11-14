@@ -9,29 +9,32 @@ import { makeUser } from "../test/factories/make-user.ts";
 import { makePost } from "../test/factories/make-post.ts";
 import { makeComment } from "../test/factories/make-comment.ts";
 
-test("get a comment by id", async () => {
+test("update a comment", async () => {
   await server.ready();
 
   const user = await makeUser();
   const post = await makePost({ userId: user.id });
 
   const commentId = randomUUID();
-  const parentContent = faker.word.noun();
-
-  const parentComment = await makeComment({
-    userId: user.id,
-    postId: post.id,
-    content: parentContent,
-  });
+  const score = faker.number.int({ min: 0, max: 100 });
 
   const comment = await makeComment({
     userId: user.id,
     postId: post.id,
     commentId,
-    parentCommentId: parentComment.id,
+    score,
   });
 
-  const response = await request(server.server).get(`/comments/${comment.id}`);
+  const updatedContent = faker.lorem.paragraph();
+  const updatedScore = faker.number.int({ min: 0, max: 100 });
+
+  const response = await request(server.server)
+    .put(`/comments/${comment.id}`)
+    .set("Content-Type", "application/json")
+    .send({
+      content: updatedContent,
+      score: updatedScore,
+    });
 
   expect(response.status).toEqual(200);
   expect(response.body).toEqual({
@@ -39,12 +42,10 @@ test("get a comment by id", async () => {
       id: commentId,
       postId: post.id,
       userId: user.id,
-      content: expect.any(String),
+      content: updatedContent,
       createdAt: expect.any(String),
-      parentCommentId: parentComment.id,
-      score: expect.any(Number),
-      username: expect.any(String),
-      avatar: expect.any(String),
+      parentCommentId: null,
+      score: updatedScore,
     },
   });
 });
@@ -52,9 +53,12 @@ test("get a comment by id", async () => {
 test("return 404 for non existing comments", async () => {
   await server.ready();
 
-  const response = await request(server.server).get(
-    `/comments/569d8f11-563c-4048-8b1b-0c36b83d597b`
-  );
+  const response = await request(server.server)
+    .put(`/comments/569d8f11-563c-4048-8b1b-0c36b83d597b`)
+    .set("Content-Type", "application/json")
+    .send({
+      content: faker.lorem.paragraph(),
+    });
 
   expect(response.status).toEqual(404);
 });

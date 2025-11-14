@@ -8,11 +8,15 @@ export async function makeComment({
   postId,
   userId,
   content,
+  parentCommentId,
+  score,
 }: {
   commentId?: string;
   postId: string;
   userId: string;
   content?: string;
+  parentCommentId?: string;
+  score?: number;
 }) {
   const result = await db
     .insert(comments)
@@ -21,6 +25,8 @@ export async function makeComment({
       postId,
       userId,
       content: content ?? faker.lorem.paragraph(),
+      parentCommentId,
+      score,
     })
     .returning();
 

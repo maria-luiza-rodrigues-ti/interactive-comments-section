@@ -7,6 +7,7 @@ import {
   type ZodTypeProvider,
   jsonSchemaTransform,
 } from "fastify-type-provider-zod";
+
 import { getPostsRoute } from "./src/routes/get-posts.ts";
 import { getUsersRoute } from "./src/routes/get-users.ts";
 import { getPostByIdRoute } from "./src/routes/get-post-by-id.ts";

@@ -14,11 +14,19 @@ test("get a comment searching from content", async () => {
   const post = await makePost({ userId: user.id });
 
   const content = faker.word.noun();
+  const parentContent = faker.word.noun();
+
+  const parentComment = await makeComment({
+    userId: user.id,
+    postId: post.id,
+    content: parentContent,
+  });
 
   const comment = await makeComment({
     userId: user.id,
     postId: post.id,
     content,
+    parentCommentId: parentComment.id,
   });
 
   const response = await request(server.server).get(
@@ -37,7 +45,7 @@ test("get a comment searching from content", async () => {
         createdAt: expect.any(String),
         username: expect.any(String),
         avatar: expect.any(String),
-        parentCommentId: null,
+        parentCommentId: parentComment.id,
         score: expect.any(Number),
       },
     ],
