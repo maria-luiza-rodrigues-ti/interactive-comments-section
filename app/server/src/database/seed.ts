@@ -1,6 +1,7 @@
+import { fakerPT_BR as faker } from "@faker-js/faker";
+
 import { db } from "./client.ts";
 import { comments, posts, users } from "./schema.ts";
-import { fakerPT_BR as faker } from "@faker-js/faker";
 
 async function seed() {
   const usersInsert = await db
