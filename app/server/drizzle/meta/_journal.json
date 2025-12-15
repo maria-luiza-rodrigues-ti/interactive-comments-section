@@ -36,6 +36,20 @@
       "when": 1758928857356,
       "tag": "0004_soft_black_tom",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1765805607821,
+      "tag": "0005_happy_fat_cobra",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1765805626474,
+      "tag": "0006_black_blockbuster",
+      "breakpoints": true
     }
   ]
 }
