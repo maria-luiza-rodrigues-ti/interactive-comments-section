@@ -17,6 +17,7 @@
     "@fastify/swagger": "^9.5.1",
     "@scalar/fastify-api-reference": "^1.36.0",
     "@types/supertest": "^6.0.3",
+    "argon2": "^0.44.0",
     "dotenv": "^17.2.2",
     "dotenv-cli": "^10.0.0",
     "drizzle-orm": "^0.44.5",
@@ -29,9 +30,9 @@
   "devDependencies": {
     "@eslint/js": "^9.36.0",
     "@faker-js/faker": "^10.0.0",
+    "@interactive-comments/eslint-config": "workspace:*",
     "@interactive-comments/typescript-config": "workspace:*",
     "@interactive-comments/vitest-config": "workspace:*",
-    "@interactive-comments/eslint-config": "workspace:*",
     "@types/node": "^24.5.2",
     "@types/pg": "^8.15.5",
     "@vitest/coverage-v8": "^3.2.4",

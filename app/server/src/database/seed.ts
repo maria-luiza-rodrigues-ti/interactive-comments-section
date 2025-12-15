@@ -1,9 +1,12 @@
 import { fakerPT_BR as faker } from "@faker-js/faker";
+import { hash } from "argon2";
 
 import { db } from "./client.ts";
 import { comments, posts, users } from "./schema.ts";
 
 async function seed() {
+  const passwordHash = await hash("123456");
+
   const usersInsert = await db
     .insert(users)
     .values([
@@ -11,31 +14,37 @@ async function seed() {
         email: faker.internet.email(),
         username: faker.lorem.slug({ min: 1, max: 5 }),
         avatar: faker.image.urlPicsumPhotos(),
+        password: passwordHash,
       },
       {
         email: faker.internet.email(),
         username: faker.lorem.slug({ min: 1, max: 5 }),
         avatar: faker.image.urlPicsumPhotos(),
+        password: passwordHash,
       },
       {
         email: faker.internet.email(),
         username: faker.lorem.slug({ min: 1, max: 5 }),
         avatar: faker.image.urlPicsumPhotos(),
+        password: passwordHash,
       },
       {
         email: faker.internet.email(),
         username: faker.lorem.slug({ min: 1, max: 5 }),
         avatar: faker.image.urlPicsumPhotos(),
+        password: passwordHash,
       },
       {
         email: faker.internet.email(),
         username: faker.lorem.slug({ min: 1, max: 5 }),
         avatar: faker.image.urlPicsumPhotos(),
+        password: passwordHash,
       },
       {
         email: faker.internet.email(),
         username: faker.lorem.slug({ min: 1, max: 5 }),
         avatar: faker.image.urlPicsumPhotos(),
+        password: passwordHash,
       },
     ])
     .returning();
